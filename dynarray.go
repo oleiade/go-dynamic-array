@@ -1,5 +1,8 @@
 package dynarray
 
+import (
+    "errors"
+)
 
 type DynamicArray struct {
     logical_size    int
@@ -48,6 +51,24 @@ func (s *DynamicArray) resize(new_logical_size int) {
         new_logical_size == (s.capacity / 4)) {
         s.shrink()
     }
+}
+
+// Get retrieves the value store at the given index
+// in dynamic array. Throws an error if index out of range.
+func (s *DynamicArray) Get(index int) (interface{}, error) {
+    if index >= 0 && index < s.logical_size {
+        return s.container[index], nil
+    }
+    return nil, errors.New("Index out of range")
+}
+
+// Range retrieves a dynamic store slice with the provided
+// edges. Throws an error if index out of range.
+func (s *DynamicArray) Range(start int, stop int) ([]interface{}, error) {
+    if start >= 0 && stop < s.logical_size {
+        return s.container[start:stop], nil
+    }
+    return nil, errors.New("Index out of range")
 }
 
 // prepend_val adds a value at the beggining of the dynamic
